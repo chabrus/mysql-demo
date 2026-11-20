@@ -48,3 +48,427 @@ load();
 </script>
 </body>
 </html>
+
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Galaxy Guestbook — Ruslan</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(ellipse at bottom, #141836 0%, #070812 100%);
+      color: #ffffff;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px 16px 60px;
+      position: relative;
+    }
+
+    /* Живой фон со звездами */
+    #starfield {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 540px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Верхняя панель статуса */
+    .top-bar {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #94a3b8;
+      margin-bottom: 28px;
+    }
+
+    .live-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #38bdf8;
+      font-weight: 600;
+    }
+
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      background: #38bdf8;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #38bdf8;
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    /* Неоновая планета */
+    .planet-wrapper {
+      margin-bottom: 20px;
+      animation: float 5s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .planet-svg {
+      width: 130px;
+      height: 130px;
+      filter: drop-shadow(0 0 28px rgba(139, 92, 246, 0.55));
+    }
+
+    h1 {
+      font-size: 32px;
+      font-weight: 800;
+      text-align: center;
+      line-height: 1.2;
+      margin-bottom: 10px;
+      background: linear-gradient(90deg, #ffffff, #c4b5fd, #7dd3fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      color: #94a3b8;
+      font-size: 15px;
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    /* Карточка формы (Glassmorphism) */
+    .glass-card {
+      width: 100%;
+      background: rgba(20, 24, 52, 0.65);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(139, 92, 246, 0.35);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(139, 92, 246, 0.1);
+      margin-bottom: 32px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    input {
+      width: 100%;
+      padding: 15px 18px;
+      border-radius: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      background: rgba(10, 12, 28, 0.8);
+      color: #ffffff;
+      font-size: 16px;
+      outline: none;
+      transition: all 0.25s ease;
+    }
+
+    input::placeholder {
+      color: #64748b;
+    }
+
+    input:focus {
+      border-color: #8b5cf6;
+      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.25);
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #7c3aed 0%, #3b82f6 100%);
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 0 8px 25px rgba(124, 58, 237, 0.45);
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(124, 58, 237, 0.65);
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Список гостей */
+    .guests-section {
+      width: 100%;
+    }
+
+    .guests-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      padding: 0 4px;
+    }
+
+    .guests-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #e2e8f0;
+    }
+
+    .guests-count {
+      background: rgba(139, 92, 246, 0.2);
+      border: 1px solid rgba(139, 92, 246, 0.4);
+      color: #c4b5fd;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    li {
+      background: rgba(20, 24, 52, 0.55);
+      border: 1px solid rgba(148, 163, 184, 0.15);
+      border-radius: 14px;
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+      animation: slideIn 0.35s ease;
+    }
+
+    li:hover {
+      transform: translateX(4px);
+      border-color: rgba(139, 92, 246, 0.45);
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .guest-name {
+      font-weight: 600;
+      font-size: 16px;
+      color: #f8fafc;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .star-icon {
+      color: #fbbf24;
+      font-size: 14px;
+    }
+
+    .guest-time {
+      font-size: 12px;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="starfield"></canvas>
+
+  <div class="container">
+    <div class="top-bar">
+      <span>✦ GALAXY BOOK • RUSLAN</span>
+      <span class="live-badge"><span class="live-dot"></span> LIVE</span>
+    </div>
+
+    <div class="planet-wrapper">
+      <svg class="planet-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="planetGrad" cx="35%" cy="30%" r="70%">
+            <stop offset="0%" stop-color="#c4b5fd" />
+            <stop offset="45%" stop-color="#7c3aed" />
+            <stop offset="100%" stop-color="#1e1b4b" />
+          </radialGradient>
+          <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.9" />
+            <stop offset="50%" stop-color="#a855f7" stop-opacity="0.7" />
+            <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.2" />
+          </linearGradient>
+        </defs>
+        <!-- Задняя часть кольца -->
+        <path d="M 22 122 C 12 95, 55 62, 115 48 C 165 37, 192 48, 185 68" stroke="url(#ringGrad)" stroke-width="8" stroke-linecap="round" opacity="0.5"/>
+        <!-- Планета -->
+        <circle cx="100" cy="100" r="54" fill="url(#planetGrad)" />
+        <!-- Передняя часть кольца -->
+        <path d="M 185 68 C 193 92, 148 128, 88 142 C 42 152, 26 140, 22 122" stroke="url(#ringGrad)" stroke-width="9" stroke-linecap="round" />
+      </svg>
+    </div>
+
+    <h1>Ismingizni koinotda<br>qoldiring ✨</h1>
+    <p class="subtitle">Har bir mehmon — yangi yulduz.</p>
+
+    <div class="glass-card">
+      <form id="noteForm">
+        <input type="text" id="nameInput" placeholder="Ismingizni kiriting..." required maxlength="100" />
+        <button type="submit" id="submitBtn">🚀 Koinotga qo'shilish</button>
+      </form>
+    </div>
+
+    <div class="guests-section">
+      <div class="guests-header">
+        <span class="guests-title">🪐 Galaktika mehmonlari</span>
+        <span class="guests-count" id="countBadge">0</span>
+      </div>
+      <ul id="notesList"></ul>
+    </div>
+  </div>
+
+  <script>
+    // 1. Анимация звездного неба на Canvas
+    const canvas = document.getElementById('starfield');
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      stars = Array.from({ length: 130 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 1.6 + 0.3,
+        speed: Math.random() * 0.25 + 0.05,
+        alpha: Math.random(),
+        delta: (Math.random() * 0.02) + 0.005
+      }));
+    }
+
+    function animateStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (const s of stars) {
+        s.y -= s.speed;
+        if (s.y < 0) {
+          s.y = canvas.height;
+          s.x = Math.random() * canvas.width;
+        }
+        s.alpha += s.delta;
+        if (s.alpha > 1 || s.alpha < 0.15) s.delta = -s.delta;
+
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(226, 232, 240, ${s.alpha})`;
+        ctx.fill();
+      }
+      requestAnimationFrame(animateStars);
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    animateStars();
+
+    // 2. Работа с Netlify Function (/api) и базой TiDB
+    const API_URL = '/.netlify/functions/api';
+    const form = document.getElementById('noteForm');
+    const input = document.getElementById('nameInput');
+    const btn = document.getElementById('submitBtn');
+    const list = document.getElementById('notesList');
+    const countBadge = document.getElementById('countBadge');
+
+    async function loadNotes() {
+      try {
+        const res = await fetch(API_URL);
+        const data = await res.json();
+        list.innerHTML = '';
+        countBadge.textContent = Array.isArray(data) ? data.length : 0;
+
+        if (Array.isArray(data)) {
+          data.forEach(item => {
+            const li = document.createElement('li');
+            const dateStr = item.created_at
+              ? new Date(item.created_at).toLocaleString('ru-RU', {
+                  day: '2-digit', month: '2-digit', year: 'numeric',
+                  hour: '2-digit', minute: '2-digit'
+                })
+              : '';
+            li.innerHTML = `
+              <span class="guest-name"><span class="star-icon">✦</span>${escapeHtml(item.name)}</span>
+              <span class="guest-time">${dateStr}</span>
+            `;
+            list.appendChild(li);
+          });
+        }
+      } catch (err) {
+        console.error('Yuklashda xatolik:', err);
+      }
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = input.value.trim();
+      if (!name) return;
+
+      btn.disabled = true;
+      btn.textContent = '⏳ Uchirilmoqda...';
+
+      try {
+        await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name })
+        });
+        input.value = '';
+        await loadNotes();
+      } catch (err) {
+        alert('Saqlashda xatolik yuz berdi');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "🚀 Koinotga qo'shilish";
+      }
+    });
+
+    loadNotes();
+  </script>
+</body>
+</html>
