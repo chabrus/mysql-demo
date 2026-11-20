@@ -20,11 +20,10 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 30px 16px 60px;
+      padding: 26px 16px 70px;
       position: relative;
     }
 
-    /* Живой фон со звездами */
     #starfield {
       position: fixed;
       top: 0;
@@ -39,23 +38,29 @@
       position: relative;
       z-index: 1;
       width: 100%;
-      max-width: 540px;
+      max-width: 560px;
       display: flex;
       flex-direction: column;
       align-items: center;
     }
 
-    /* Верхняя панель статуса */
+    /* Верхняя панель */
     .top-bar {
       width: 100%;
       display: flex;
       justify-content: space-between;
       align-items: center;
       font-size: 12px;
-      letter-spacing: 2px;
+      letter-spacing: 1.5px;
       text-transform: uppercase;
       color: #94a3b8;
-      margin-bottom: 28px;
+      margin-bottom: 24px;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
     .live-badge {
@@ -80,9 +85,36 @@
       50% { opacity: 0.4; transform: scale(0.85); }
     }
 
-    /* Неоновая планета */
+    .admin-btn {
+      background: rgba(139, 92, 246, 0.15);
+      border: 1px solid rgba(139, 92, 246, 0.4);
+      color: #c4b5fd;
+      padding: 5px 10px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      transition: all 0.2s ease;
+      width: auto;
+      box-shadow: none;
+    }
+
+    .admin-btn:hover {
+      background: rgba(139, 92, 246, 0.35);
+      transform: none;
+      box-shadow: none;
+    }
+
+    .admin-btn.active {
+      background: rgba(16, 185, 129, 0.2);
+      border-color: #10b981;
+      color: #6ee7b7;
+    }
+
+    /* Планета */
     .planet-wrapper {
-      margin-bottom: 20px;
+      margin-bottom: 18px;
       animation: float 5s ease-in-out infinite;
     }
 
@@ -92,8 +124,8 @@
     }
 
     .planet-svg {
-      width: 130px;
-      height: 130px;
+      width: 125px;
+      height: 125px;
       filter: drop-shadow(0 0 28px rgba(139, 92, 246, 0.55));
     }
 
@@ -112,10 +144,10 @@
       color: #94a3b8;
       font-size: 15px;
       text-align: center;
-      margin-bottom: 28px;
+      margin-bottom: 26px;
     }
 
-    /* Карточка формы (Glassmorphism) */
+    /* Форма */
     .glass-card {
       width: 100%;
       background: rgba(20, 24, 52, 0.65);
@@ -123,9 +155,9 @@
       -webkit-backdrop-filter: blur(14px);
       border: 1px solid rgba(139, 92, 246, 0.35);
       border-radius: 20px;
-      padding: 24px;
+      padding: 22px;
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(139, 92, 246, 0.1);
-      margin-bottom: 32px;
+      margin-bottom: 30px;
     }
 
     form {
@@ -155,7 +187,7 @@
       box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.25);
     }
 
-    button {
+    .submit-btn {
       width: 100%;
       padding: 15px;
       border: none;
@@ -169,18 +201,18 @@
       box-shadow: 0 8px 25px rgba(124, 58, 237, 0.45);
     }
 
-    button:hover {
+    .submit-btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 12px 30px rgba(124, 58, 237, 0.65);
     }
 
-    button:disabled {
+    .submit-btn:disabled {
       opacity: 0.6;
       cursor: not-allowed;
       transform: none;
     }
 
-    /* Список гостей */
+    /* Список сообщений */
     .guests-section {
       width: 100%;
     }
@@ -213,23 +245,23 @@
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
     }
 
     li {
-      background: rgba(20, 24, 52, 0.55);
-      border: 1px solid rgba(148, 163, 184, 0.15);
-      border-radius: 14px;
-      padding: 14px 18px;
+      background: rgba(20, 24, 52, 0.6);
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      border-radius: 16px;
+      padding: 16px 18px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 12px;
       transition: transform 0.2s ease, border-color 0.2s ease;
       animation: slideIn 0.35s ease;
     }
 
     li:hover {
-      transform: translateX(4px);
       border-color: rgba(139, 92, 246, 0.45);
     }
 
@@ -238,23 +270,61 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
+    .note-content {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
     .guest-name {
-      font-weight: 600;
+      font-weight: 700;
       font-size: 16px;
       color: #f8fafc;
       display: flex;
-      align-items: center;
-      gap: 10px;
+      align-items: flex-start;
+      gap: 8px;
+      line-height: 1.4;
+      word-break: break-word;
     }
 
     .star-icon {
-      color: #fbbf24;
-      font-size: 14px;
+      color: #c4b5fd;
+      font-size: 15px;
+      margin-top: 2px;
     }
 
-    .guest-time {
+    .note-meta {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
       font-size: 12px;
-      color: #64748b;
+      color: #94a3b8;
+      padding-left: 22px;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .delete-btn {
+      background: rgba(239, 68, 68, 0.18);
+      border: 1px solid rgba(239, 68, 68, 0.45);
+      color: #fca5a5;
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .delete-btn:hover {
+      background: rgba(239, 68, 68, 0.4);
+      color: #ffffff;
     }
   </style>
 </head>
@@ -264,7 +334,10 @@
   <div class="container">
     <div class="top-bar">
       <span>✦ GALAXY BOOK • RUSLAN</span>
-      <span class="live-badge"><span class="live-dot"></span> LIVE</span>
+      <div class="top-actions">
+        <span class="live-badge"><span class="live-dot"></span> LIVE</span>
+        <button type="button" class="admin-btn" id="adminToggle">🔐 Admin</button>
+      </div>
     </div>
 
     <div class="planet-wrapper">
@@ -281,11 +354,8 @@
             <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.2" />
           </linearGradient>
         </defs>
-        <!-- Задняя часть кольца -->
         <path d="M 22 122 C 12 95, 55 62, 115 48 C 165 37, 192 48, 185 68" stroke="url(#ringGrad)" stroke-width="8" stroke-linecap="round" opacity="0.5"/>
-        <!-- Планета -->
         <circle cx="100" cy="100" r="54" fill="url(#planetGrad)" />
-        <!-- Передняя часть кольца -->
         <path d="M 185 68 C 193 92, 148 128, 88 142 C 42 152, 26 140, 22 122" stroke="url(#ringGrad)" stroke-width="9" stroke-linecap="round" />
       </svg>
     </div>
@@ -295,8 +365,8 @@
 
     <div class="glass-card">
       <form id="noteForm">
-        <input type="text" id="nameInput" placeholder="Ismingizni kiriting..." required maxlength="100" />
-        <button type="submit" id="submitBtn">🚀 Koinotga qo'shilish</button>
+        <input type="text" id="nameInput" placeholder="Ismingizni yoki tilagingizni kiriting..." required maxlength="250" />
+        <button type="submit" class="submit-btn" id="submitBtn">🚀 Koinotga qo'shilish</button>
       </form>
     </div>
 
@@ -310,7 +380,7 @@
   </div>
 
   <script>
-    // 1. Анимация звездного неба на Canvas
+    // 1. Анимация звездного неба
     const canvas = document.getElementById('starfield');
     const ctx = canvas.getContext('2d');
     let stars = [];
@@ -318,7 +388,7 @@
     function resizeCanvas() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      stars = Array.from({ length: 130 }, () => ({
+      stars = Array.from({ length: 140 }, () => ({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
         r: Math.random() * 1.6 + 0.3,
@@ -351,13 +421,88 @@
     resizeCanvas();
     animateStars();
 
-    // 2. Работа с Netlify Function (/api) и базой TiDB
+    // 2. Определение страны посетителя
+    let visitorCountry = 'Uzbekistan';
+    async function detectCountry() {
+      try {
+        const res = await fetch('https://ipapi.co/json/');
+        const geo = await res.json();
+        if (geo && geo.country_name) {
+          visitorCountry = geo.country_name;
+        }
+      } catch (e) {
+        // Если блокировщик закрыл запрос, подстрахует бэкенд Netlify
+      }
+    }
+    detectCountry();
+
+    // 3. Админ-панель и работа с базой
     const API_URL = '/.netlify/functions/api';
     const form = document.getElementById('noteForm');
     const input = document.getElementById('nameInput');
     const btn = document.getElementById('submitBtn');
     const list = document.getElementById('notesList');
     const countBadge = document.getElementById('countBadge');
+    const adminToggle = document.getElementById('adminToggle');
+
+    let adminPass = sessionStorage.getItem('galaxy_admin_pass') || '';
+
+    function updateAdminButton() {
+      if (adminPass) {
+        adminToggle.textContent = '🔓 Admin (ON)';
+        adminToggle.classList.add('active');
+      } else {
+        adminToggle.textContent = '🔐 Admin';
+        adminToggle.classList.remove('active');
+      }
+    }
+    updateAdminButton();
+
+    adminToggle.addEventListener('click', () => {
+      if (adminPass) {
+        adminPass = '';
+        sessionStorage.removeItem('galaxy_admin_pass');
+        updateAdminButton();
+        loadNotes();
+      } else {
+        const pass = prompt('Admin parolni kiriting:');
+        if (pass) {
+          adminPass = pass.trim();
+          sessionStorage.setItem('galaxy_admin_pass', adminPass);
+          updateAdminButton();
+          loadNotes();
+        }
+      }
+    });
+
+    async function deleteNote(id) {
+      if (!confirm("Ushbu yozuvni o'chirmoqchimisiz?")) return;
+      try {
+        const res = await fetch(API_URL, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-admin-pass': adminPass
+          },
+          body: JSON.stringify({ id })
+        });
+        if (res.status === 401) {
+          alert("Parol noto'g'ri!");
+          adminPass = '';
+          sessionStorage.removeItem('galaxy_admin_pass');
+          updateAdminButton();
+        }
+        await loadNotes();
+      } catch (err) {
+        alert("O'chirishda xatolik");
+      }
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
 
     async function loadNotes() {
       try {
@@ -370,27 +515,39 @@
           data.forEach(item => {
             const li = document.createElement('li');
             const dateStr = item.created_at
-              ? new Date(item.created_at).toLocaleString('ru-RU', {
-                  day: '2-digit', month: '2-digit', year: 'numeric',
+              ? new Date(item.created_at).toLocaleString('sv-SE', {
+                  year: 'numeric', month: '2-digit', day: '2-digit',
                   hour: '2-digit', minute: '2-digit'
                 })
               : '';
-            li.innerHTML = `
-              <span class="guest-name"><span class="star-icon">✦</span>${escapeHtml(item.name)}</span>
-              <span class="guest-time">${dateStr}</span>
+            const countryName = item.country || 'Uzbekistan';
+
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'note-content';
+            contentDiv.innerHTML = `
+              <div class="guest-name"><span class="star-icon">✦</span><span>${escapeHtml(item.name)}</span></div>
+              <div class="note-meta">
+                <span class="meta-item">🌍 ${escapeHtml(countryName)}</span>
+                <span class="meta-item">📅 ${dateStr}</span>
+              </div>
             `;
+            li.appendChild(contentDiv);
+
+            if (adminPass && item.id) {
+              const delBtn = document.createElement('button');
+              delBtn.type = 'button';
+              delBtn.className = 'delete-btn';
+              delBtn.textContent = "🗑 O'chirish";
+              delBtn.onclick = () => deleteNote(item.id);
+              li.appendChild(delBtn);
+            }
+
             list.appendChild(li);
           });
         }
       } catch (err) {
         console.error('Yuklashda xatolik:', err);
       }
-    }
-
-    function escapeHtml(text) {
-      const div = document.createElement('div');
-      div.textContent = text;
-      return div.innerHTML;
     }
 
     form.addEventListener('submit', async (e) => {
@@ -405,7 +562,7 @@
         await fetch(API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name })
+          body: JSON.stringify({ name, country: visitorCountry })
         });
         input.value = '';
         await loadNotes();
