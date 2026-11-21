@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ADU • ATT Digital Wall — Ruslan</title>
+  <title>ADU • ATT Digital Wall — Chabanov Ruslan Alievich</title>
   <style>
     * {
       box-sizing: border-box;
@@ -20,7 +20,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 24px 16px 70px;
+      padding: 24px 16px 40px;
       position: relative;
     }
 
@@ -41,6 +41,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      flex: 1;
     }
 
     /* Верхняя панель */
@@ -56,7 +57,7 @@
       -webkit-backdrop-filter: blur(12px);
       border: 1px solid rgba(56, 189, 248, 0.2);
       border-radius: 14px;
-      margin-bottom: 26px;
+      margin-bottom: 24px;
       font-size: 12px;
       letter-spacing: 1.2px;
       text-transform: uppercase;
@@ -129,8 +130,8 @@
     /* Эмблема ADU */
     .adu-emblem {
       position: relative;
-      width: 84px;
-      height: 84px;
+      width: 82px;
+      height: 82px;
       border-radius: 24px;
       background: linear-gradient(135deg, rgba(14, 165, 233, 0.2), rgba(99, 102, 241, 0.25));
       border: 1px solid rgba(56, 189, 248, 0.45);
@@ -138,7 +139,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
       box-shadow: 0 0 35px rgba(14, 165, 233, 0.28), inset 0 0 16px rgba(56, 189, 248, 0.15);
       animation: floatEmblem 4.5s ease-in-out infinite;
     }
@@ -166,11 +167,11 @@
     }
 
     h1 {
-      font-size: 30px;
+      font-size: 29px;
       font-weight: 800;
       text-align: center;
       line-height: 1.25;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
       background: linear-gradient(90deg, #ffffff 0%, #bae6fd 50%, #a5b4fc 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -180,7 +181,59 @@
       color: #94a3b8;
       font-size: 14px;
       text-align: center;
-      margin-bottom: 22px;
+      margin-bottom: 16px;
+    }
+
+    /* Официальный бейдж разработчика */
+    .author-badge {
+      width: 100%;
+      background: linear-gradient(135deg, rgba(14, 165, 233, 0.14) 0%, rgba(79, 70, 229, 0.18) 100%);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      border-radius: 14px;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 24px rgba(2, 132, 199, 0.15);
+    }
+
+    .author-icon {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: rgba(56, 189, 248, 0.18);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-weight: 800;
+      font-size: 13px;
+      color: #38bdf8;
+    }
+
+    .author-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .author-role {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #7dd3fc;
+      font-weight: 700;
+    }
+
+    .author-name {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #f1f5f9;
+      line-height: 1.35;
     }
 
     /* Панель статистики */
@@ -284,6 +337,7 @@
     /* Список записей */
     .wall-section {
       width: 100%;
+      margin-bottom: 36px;
     }
 
     .wall-header {
@@ -432,6 +486,31 @@
       background: rgba(239, 68, 68, 0.4);
       color: #ffffff;
     }
+
+    /* Технический футер автора */
+    .footer {
+      width: 100%;
+      text-align: center;
+      padding: 16px 14px;
+      background: rgba(15, 23, 42, 0.55);
+      border: 1px solid rgba(148, 163, 184, 0.14);
+      border-radius: 14px;
+      font-size: 12px;
+      color: #94a3b8;
+      line-height: 1.6;
+    }
+
+    .footer strong {
+      color: #38bdf8;
+      font-weight: 700;
+    }
+
+    .footer-stack {
+      font-size: 11px;
+      color: #64748b;
+      margin-top: 4px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
   </style>
 </head>
 <body>
@@ -452,7 +531,15 @@
     </div>
 
     <h1>Andijon Davlat Universiteti<br>Raqamli Xotira Devori</h1>
-    <p class="subtitle">O'z ismingiz va tilagingizni universitet tarixiga muhrlang • By Ruslan</p>
+    <p class="subtitle">O'z ismingiz va tilagingizni universitet tarixiga muhrlang</p>
+
+    <div class="author-badge">
+      <div class="author-icon">&lt;/&gt;</div>
+      <div class="author-info">
+        <span class="author-role">Loyiha muallifi • Developer</span>
+        <span class="author-name">ATT guruhi talabasi Chabanov Ruslan Alievich tomonidan ishlab chiqildi</span>
+      </div>
+    </div>
 
     <div class="stats-row">
       <div class="stat-box">
@@ -482,10 +569,16 @@
       </div>
       <ul id="notesList"></ul>
     </div>
+
+    <footer class="footer">
+      <div>© 2026 Andijon Davlat Universiteti (ADU)</div>
+      <div><strong>ATT guruhi talabasi Chabanov Ruslan Alievich</strong> tomonidan yaratilgan</div>
+      <div class="footer-stack">Architecture: Frontend UI • Netlify Serverless API • TiDB Cloud MySQL</div>
+    </footer>
   </div>
 
   <script>
-    // 1. Интерактивный фон "Нейросеть ADU" (не перегружает телефон и реагирует на курсор)
+    // 1. Интерактивный фон "Нейросеть ADU"
     const canvas = document.getElementById('neuralCanvas');
     const ctx = canvas.getContext('2d');
     let nodes = [];
@@ -530,13 +623,11 @@
         if (a.x < 0 || a.x > canvas.width) a.vx *= -1;
         if (a.y < 0 || a.y > canvas.height) a.vy *= -1;
 
-        // Точка узла
         ctx.beginPath();
         ctx.arc(a.x, a.y, a.r, 0, Math.PI * 2);
         ctx.fillStyle = 'rgba(56, 189, 248, 0.75)';
         ctx.fill();
 
-        // Соединение узлов между собой
         for (let j = i + 1; j < nodes.length; j++) {
           const b = nodes[j];
           const dx = a.x - b.x;
@@ -552,7 +643,6 @@
           }
         }
 
-        // Притяжение линий к курсору/пальцу
         if (mouse.x !== null && mouse.y !== null) {
           const mdx = a.x - mouse.x;
           const mdy = a.y - mouse.y;
@@ -636,7 +726,6 @@
       const isLiked = likedIds.has(id);
       const action = isLiked ? 'unlike' : 'like';
 
-      // Мгновенный отклик в интерфейсе
       let currentCount = Number(countEl.textContent) || 0;
       if (isLiked) {
         likedIds.delete(id);
@@ -749,7 +838,6 @@
 
           const actionsDiv = li.querySelector('.card-actions');
 
-          // Кнопка лайка
           const likeBtn = document.createElement('button');
           likeBtn.type = 'button';
           likeBtn.className = 'like-btn' + (isLiked ? ' liked' : '');
@@ -757,7 +845,6 @@
           likeBtn.onclick = () => toggleLike(item.id, likeBtn, likeBtn.querySelector('.like-count'));
           actionsDiv.appendChild(likeBtn);
 
-          // Кнопка удаления в режиме админа
           if (adminPass && item.id) {
             const delBtn = document.createElement('button');
             delBtn.type = 'button';
