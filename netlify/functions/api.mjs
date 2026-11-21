@@ -4,7 +4,7 @@ export const handler = async (event) => {
   const headers = {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
+    'Access-Control-Allow-Methods': 'GET, POST, PATCH, DELETE, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, x-admin-pass'
   };
 
@@ -26,7 +26,7 @@ export const handler = async (event) => {
     // 1. Получить все записи
     if (event.httpMethod === 'GET') {
       const [rows] = await connection.execute(
-        'SELECT id, name, country, created_at FROM notes ORDER BY id DESC'
+        'SELECT id, name, country, COALESCE(likes, 0) AS likes, created_at FROM notes ORDER BY id DESC'
       );
       return { statusCode: 200, headers, body: JSON.stringify(rows) };
     }
@@ -39,8 +39,7 @@ export const handler = async (event) => {
         return { statusCode: 400, headers, body: JSON.stringify({ error: 'Name required' }) };
       }
 
-      // Определяем страну: сначала из Netlify Geo-заголовка, иначе из запроса фронтенда
-      let country = body.country || 'Unknown';
+      let country = body.country || 'Uzbekistan';
       if (event.headers['x-nf-geo']) {
         try {
           const geo = JSON.parse(Buffer.from(event.headers['x-nf-geo'], 'base64').toString('utf-8'));
@@ -49,13 +48,38 @@ export const handler = async (event) => {
       }
 
       await connection.execute(
-        'INSERT INTO notes (name, country) VALUES (?, ?)',
+        'INSERT INTO notes (name, country, likes) VALUES (?, ?, 0)',
         [name, country]
       );
       return { statusCode: 201, headers, body: JSON.stringify({ ok: true }) };
     }
 
-    // 3. Удалить запись (только для админа)
+    // 3. Поставить или снять лайк
+    if (event.httpMethod === 'PATCH') {
+      const body = JSON.parse(event.body || '{}');
+      const id = Number(body.id);
+      if (!id) {
+        return { statusCode: 400, headers, body: JSON.stringify({ error: 'ID required' }) };
+      }
+
+      const delta = body.action === 'unlike' ? -1 : 1;
+      await connection.execute(
+        'UPDATE notes SET likes = GREATEST(0, COALESCE(likes, 0) + ?) WHERE id = ?',
+        [delta, id]
+      );
+
+      const [rows] = await connection.execute(
+        'SELECT COALESCE(likes, 0) AS likes FROM notes WHERE id = ?',
+        [id]
+      );
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({ ok: true, likes: rows[0]?.likes ?? 0 })
+      };
+    }
+
+    // 4. Удалить запись (только для админа)
     if (event.httpMethod === 'DELETE') {
       const adminPass = event.headers['x-admin-pass'];
       const correctPass = process.env.ADMIN_PASS || 'ruslan2026';
