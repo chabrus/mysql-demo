@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Galaxy Guestbook — Ruslan</title>
+  <title>ADU • ATT Digital Wall — Ruslan</title>
   <style>
     * {
       box-sizing: border-box;
@@ -14,20 +14,19 @@
 
     body {
       min-height: 100vh;
-      background: radial-gradient(ellipse at bottom, #141836 0%, #070812 100%);
-      color: #ffffff;
+      background: radial-gradient(circle at 20% 20%, #0f172a 0%, #060913 60%, #03050a 100%);
+      color: #f8fafc;
       overflow-x: hidden;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 26px 16px 70px;
+      padding: 24px 16px 70px;
       position: relative;
     }
 
-    #starfield {
+    #neuralCanvas {
       position: fixed;
-      top: 0;
-      left: 0;
+      inset: 0;
       width: 100%;
       height: 100%;
       z-index: 0;
@@ -38,7 +37,7 @@
       position: relative;
       z-index: 1;
       width: 100%;
-      max-width: 560px;
+      max-width: 600px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -50,60 +49,75 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 14px;
+      margin-bottom: 26px;
       font-size: 12px;
-      letter-spacing: 1.5px;
+      letter-spacing: 1.2px;
       text-transform: uppercase;
       color: #94a3b8;
-      margin-bottom: 24px;
+    }
+
+    .brand-tag {
+      font-weight: 700;
+      color: #e2e8f0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-tag span {
+      color: #38bdf8;
     }
 
     .top-actions {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
     .live-badge {
       display: flex;
       align-items: center;
       gap: 6px;
-      color: #38bdf8;
-      font-weight: 600;
+      color: #34d399;
+      font-weight: 700;
+      font-size: 11px;
     }
 
     .live-dot {
-      width: 8px;
-      height: 8px;
-      background: #38bdf8;
+      width: 7px;
+      height: 7px;
+      background: #34d399;
       border-radius: 50%;
-      box-shadow: 0 0 10px #38bdf8;
+      box-shadow: 0 0 10px #34d399;
       animation: pulse 1.8s infinite;
     }
 
     @keyframes pulse {
       0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(0.85); }
+      50% { opacity: 0.35; transform: scale(0.8); }
     }
 
     .admin-btn {
-      background: rgba(139, 92, 246, 0.15);
-      border: 1px solid rgba(139, 92, 246, 0.4);
-      color: #c4b5fd;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #7dd3fc;
       padding: 5px 10px;
       border-radius: 8px;
       font-size: 11px;
       font-weight: 600;
       cursor: pointer;
-      letter-spacing: 0.5px;
       transition: all 0.2s ease;
-      width: auto;
-      box-shadow: none;
     }
 
     .admin-btn:hover {
-      background: rgba(139, 92, 246, 0.35);
-      transform: none;
-      box-shadow: none;
+      background: rgba(56, 189, 248, 0.25);
     }
 
     .admin-btn.active {
@@ -112,58 +126,112 @@
       color: #6ee7b7;
     }
 
-    /* Планета */
-    .planet-wrapper {
+    /* Эмблема ADU */
+    .adu-emblem {
+      position: relative;
+      width: 84px;
+      height: 84px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, rgba(14, 165, 233, 0.2), rgba(99, 102, 241, 0.25));
+      border: 1px solid rgba(56, 189, 248, 0.45);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       margin-bottom: 18px;
-      animation: float 5s ease-in-out infinite;
+      box-shadow: 0 0 35px rgba(14, 165, 233, 0.28), inset 0 0 16px rgba(56, 189, 248, 0.15);
+      animation: floatEmblem 4.5s ease-in-out infinite;
     }
 
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
+    @keyframes floatEmblem {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-7px); }
     }
 
-    .planet-svg {
-      width: 125px;
-      height: 125px;
-      filter: drop-shadow(0 0 28px rgba(139, 92, 246, 0.55));
+    .adu-code {
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      background: linear-gradient(135deg, #ffffff 0%, #38bdf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .adu-sub {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      color: #818cf8;
+      margin-top: 2px;
     }
 
     h1 {
-      font-size: 32px;
+      font-size: 30px;
       font-weight: 800;
       text-align: center;
-      line-height: 1.2;
-      margin-bottom: 10px;
-      background: linear-gradient(90deg, #ffffff, #c4b5fd, #7dd3fc);
+      line-height: 1.25;
+      margin-bottom: 8px;
+      background: linear-gradient(90deg, #ffffff 0%, #bae6fd 50%, #a5b4fc 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
     .subtitle {
       color: #94a3b8;
-      font-size: 15px;
+      font-size: 14px;
       text-align: center;
-      margin-bottom: 26px;
+      margin-bottom: 22px;
+    }
+
+    /* Панель статистики */
+    .stats-row {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .stat-box {
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      border-radius: 14px;
+      padding: 12px 10px;
+      text-align: center;
+    }
+
+    .stat-val {
+      font-size: 20px;
+      font-weight: 800;
+      color: #38bdf8;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: #94a3b8;
+      margin-top: 2px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
     }
 
     /* Форма */
     .glass-card {
       width: 100%;
-      background: rgba(20, 24, 52, 0.65);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border: 1px solid rgba(139, 92, 246, 0.35);
+      background: rgba(15, 23, 42, 0.72);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(56, 189, 248, 0.35);
       border-radius: 20px;
-      padding: 22px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(139, 92, 246, 0.1);
-      margin-bottom: 30px;
+      padding: 20px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65), inset 0 0 24px rgba(14, 165, 233, 0.08);
+      margin-bottom: 28px;
     }
 
     form {
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 12px;
     }
 
     input {
@@ -171,9 +239,9 @@
       padding: 15px 18px;
       border-radius: 12px;
       border: 1px solid rgba(148, 163, 184, 0.25);
-      background: rgba(10, 12, 28, 0.8);
+      background: rgba(6, 9, 19, 0.85);
       color: #ffffff;
-      font-size: 16px;
+      font-size: 15px;
       outline: none;
       transition: all 0.25s ease;
     }
@@ -183,8 +251,8 @@
     }
 
     input:focus {
-      border-color: #8b5cf6;
-      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.25);
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
     }
 
     .submit-btn {
@@ -192,18 +260,19 @@
       padding: 15px;
       border: none;
       border-radius: 12px;
-      background: linear-gradient(135deg, #7c3aed 0%, #3b82f6 100%);
+      background: linear-gradient(135deg, #0284c7 0%, #4f46e5 100%);
       color: #ffffff;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
+      letter-spacing: 0.4px;
       cursor: pointer;
       transition: all 0.25s ease;
-      box-shadow: 0 8px 25px rgba(124, 58, 237, 0.45);
+      box-shadow: 0 8px 25px rgba(2, 132, 199, 0.4);
     }
 
     .submit-btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 12px 30px rgba(124, 58, 237, 0.65);
+      box-shadow: 0 12px 30px rgba(56, 189, 248, 0.55);
     }
 
     .submit-btn:disabled {
@@ -212,12 +281,12 @@
       transform: none;
     }
 
-    /* Список сообщений */
-    .guests-section {
+    /* Список записей */
+    .wall-section {
       width: 100%;
     }
 
-    .guests-header {
+    .wall-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -225,20 +294,10 @@
       padding: 0 4px;
     }
 
-    .guests-title {
-      font-size: 18px;
+    .wall-title {
+      font-size: 17px;
       font-weight: 700;
       color: #e2e8f0;
-    }
-
-    .guests-count {
-      background: rgba(139, 92, 246, 0.2);
-      border: 1px solid rgba(139, 92, 246, 0.4);
-      color: #c4b5fd;
-      padding: 3px 10px;
-      border-radius: 999px;
-      font-size: 13px;
-      font-weight: 600;
     }
 
     ul {
@@ -249,20 +308,22 @@
     }
 
     li {
-      background: rgba(20, 24, 52, 0.6);
+      background: rgba(15, 23, 42, 0.68);
+      backdrop-filter: blur(12px);
       border: 1px solid rgba(148, 163, 184, 0.16);
+      border-left: 3px solid #38bdf8;
       border-radius: 16px;
       padding: 16px 18px;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      flex-direction: column;
       gap: 12px;
       transition: transform 0.2s ease, border-color 0.2s ease;
       animation: slideIn 0.35s ease;
     }
 
     li:hover {
-      border-color: rgba(139, 92, 246, 0.45);
+      transform: translateY(-2px);
+      border-color: rgba(56, 189, 248, 0.45);
     }
 
     @keyframes slideIn {
@@ -270,27 +331,39 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    .note-content {
+    .card-top {
       display: flex;
-      flex-direction: column;
-      gap: 8px;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: #64748b;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
     }
 
-    .guest-name {
-      font-weight: 700;
+    .block-hash {
+      background: rgba(56, 189, 248, 0.1);
+      color: #7dd3fc;
+      padding: 2px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+    }
+
+    .guest-text {
+      font-weight: 600;
       font-size: 16px;
       color: #f8fafc;
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      line-height: 1.4;
+      line-height: 1.45;
       word-break: break-word;
     }
 
-    .star-icon {
-      color: #c4b5fd;
-      font-size: 15px;
-      margin-top: 2px;
+    .card-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(148, 163, 184, 0.1);
     }
 
     .note-meta {
@@ -300,7 +373,6 @@
       gap: 12px;
       font-size: 12px;
       color: #94a3b8;
-      padding-left: 22px;
     }
 
     .meta-item {
@@ -309,16 +381,50 @@
       gap: 5px;
     }
 
+    .card-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Кнопка лайка */
+    .like-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(30, 41, 59, 0.75);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      color: #cbd5e1;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .like-btn:hover {
+      border-color: #f43f5e;
+      color: #fda4af;
+      transform: scale(1.04);
+    }
+
+    .like-btn.liked {
+      background: rgba(244, 63, 94, 0.2);
+      border-color: #f43f5e;
+      color: #fb7185;
+      box-shadow: 0 0 14px rgba(244, 63, 94, 0.3);
+    }
+
     .delete-btn {
-      background: rgba(239, 68, 68, 0.18);
-      border: 1px solid rgba(239, 68, 68, 0.45);
+      background: rgba(239, 68, 68, 0.16);
+      border: 1px solid rgba(239, 68, 68, 0.4);
       color: #fca5a5;
       padding: 6px 10px;
-      border-radius: 8px;
+      border-radius: 999px;
       font-size: 12px;
       font-weight: 600;
       cursor: pointer;
-      white-space: nowrap;
       transition: all 0.2s ease;
     }
 
@@ -329,97 +435,144 @@
   </style>
 </head>
 <body>
-  <canvas id="starfield"></canvas>
+  <canvas id="neuralCanvas"></canvas>
 
   <div class="container">
     <div class="top-bar">
-      <span>✦ GALAXY BOOK • RUSLAN</span>
+      <div class="brand-tag">⚡ <span>ADU • ATT</span> DIGITAL WALL</div>
       <div class="top-actions">
         <span class="live-badge"><span class="live-dot"></span> LIVE</span>
         <button type="button" class="admin-btn" id="adminToggle">🔐 Admin</button>
       </div>
     </div>
 
-    <div class="planet-wrapper">
-      <svg class="planet-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <radialGradient id="planetGrad" cx="35%" cy="30%" r="70%">
-            <stop offset="0%" stop-color="#c4b5fd" />
-            <stop offset="45%" stop-color="#7c3aed" />
-            <stop offset="100%" stop-color="#1e1b4b" />
-          </radialGradient>
-          <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.9" />
-            <stop offset="50%" stop-color="#a855f7" stop-opacity="0.7" />
-            <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.2" />
-          </linearGradient>
-        </defs>
-        <path d="M 22 122 C 12 95, 55 62, 115 48 C 165 37, 192 48, 185 68" stroke="url(#ringGrad)" stroke-width="8" stroke-linecap="round" opacity="0.5"/>
-        <circle cx="100" cy="100" r="54" fill="url(#planetGrad)" />
-        <path d="M 185 68 C 193 92, 148 128, 88 142 C 42 152, 26 140, 22 122" stroke="url(#ringGrad)" stroke-width="9" stroke-linecap="round" />
-      </svg>
+    <div class="adu-emblem">
+      <div class="adu-code">ADU</div>
+      <div class="adu-sub">ATT • 2026</div>
     </div>
 
-    <h1>Ismingizni koinotda<br>qoldiring ✨</h1>
-    <p class="subtitle">Har bir mehmon — yangi yulduz.</p>
+    <h1>Andijon Davlat Universiteti<br>Raqamli Xotira Devori</h1>
+    <p class="subtitle">O'z ismingiz va tilagingizni universitet tarixiga muhrlang • By Ruslan</p>
+
+    <div class="stats-row">
+      <div class="stat-box">
+        <div class="stat-val" id="statPosts">0</div>
+        <div class="stat-label">Yozuvlar</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val" id="statCountries">1</div>
+        <div class="stat-label">Davlatlar</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val" id="statLikes">0</div>
+        <div class="stat-label">Jami Layklar</div>
+      </div>
+    </div>
 
     <div class="glass-card">
       <form id="noteForm">
-        <input type="text" id="nameInput" placeholder="Ismingizni yoki tilagingizni kiriting..." required maxlength="250" />
-        <button type="submit" class="submit-btn" id="submitBtn">🚀 Koinotga qo'shilish</button>
+        <input type="text" id="nameInput" placeholder="Ismingiz, guruhingiz yoki tilagingizni yozing..." required maxlength="250" />
+        <button type="submit" class="submit-btn" id="submitBtn">⚡ Raqamli iz qoldirish</button>
       </form>
     </div>
 
-    <div class="guests-section">
-      <div class="guests-header">
-        <span class="guests-title">🪐 Galaktika mehmonlari</span>
-        <span class="guests-count" id="countBadge">0</span>
+    <div class="wall-section">
+      <div class="wall-header">
+        <span class="wall-title">🌐 Talabalar va Ustozlar izlari</span>
       </div>
       <ul id="notesList"></ul>
     </div>
   </div>
 
   <script>
-    // 1. Анимация звездного неба
-    const canvas = document.getElementById('starfield');
+    // 1. Интерактивный фон "Нейросеть ADU" (не перегружает телефон и реагирует на курсор)
+    const canvas = document.getElementById('neuralCanvas');
     const ctx = canvas.getContext('2d');
-    let stars = [];
+    let nodes = [];
+    const mouse = { x: null, y: null, radius: 130 };
 
-    function resizeCanvas() {
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    });
+    window.addEventListener('touchmove', (e) => {
+      if (e.touches.length > 0) {
+        mouse.x = e.touches[0].clientX;
+        mouse.y = e.touches[0].clientY;
+      }
+    }, { passive: true });
+    window.addEventListener('mouseout', () => {
+      mouse.x = null;
+      mouse.y = null;
+    });
+
+    function initNodes() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      stars = Array.from({ length: 140 }, () => ({
+      const count = Math.min(75, Math.floor((canvas.width * canvas.height) / 14000));
+      nodes = Array.from({ length: count }, () => ({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        r: Math.random() * 1.6 + 0.3,
-        speed: Math.random() * 0.25 + 0.05,
-        alpha: Math.random(),
-        delta: (Math.random() * 0.02) + 0.005
+        vx: (Math.random() - 0.5) * 0.65,
+        vy: (Math.random() - 0.5) * 0.65,
+        r: Math.random() * 2 + 1.2
       }));
     }
 
-    function animateStars() {
+    function drawNetwork() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (const s of stars) {
-        s.y -= s.speed;
-        if (s.y < 0) {
-          s.y = canvas.height;
-          s.x = Math.random() * canvas.width;
-        }
-        s.alpha += s.delta;
-        if (s.alpha > 1 || s.alpha < 0.15) s.delta = -s.delta;
 
+      for (let i = 0; i < nodes.length; i++) {
+        const a = nodes[i];
+        a.x += a.vx;
+        a.y += a.vy;
+
+        if (a.x < 0 || a.x > canvas.width) a.vx *= -1;
+        if (a.y < 0 || a.y > canvas.height) a.vy *= -1;
+
+        // Точка узла
         ctx.beginPath();
-        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(226, 232, 240, ${s.alpha})`;
+        ctx.arc(a.x, a.y, a.r, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(56, 189, 248, 0.75)';
         ctx.fill();
+
+        // Соединение узлов между собой
+        for (let j = i + 1; j < nodes.length; j++) {
+          const b = nodes[j];
+          const dx = a.x - b.x;
+          const dy = a.y - b.y;
+          const dist = Math.hypot(dx, dy);
+          if (dist < 125) {
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.strokeStyle = `rgba(56, 189, 248, ${(1 - dist / 125) * 0.28})`;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          }
+        }
+
+        // Притяжение линий к курсору/пальцу
+        if (mouse.x !== null && mouse.y !== null) {
+          const mdx = a.x - mouse.x;
+          const mdy = a.y - mouse.y;
+          const mdist = Math.hypot(mdx, mdy);
+          if (mdist < mouse.radius) {
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(mouse.x, mouse.y);
+            ctx.strokeStyle = `rgba(129, 140, 248, ${(1 - mdist / mouse.radius) * 0.6})`;
+            ctx.lineWidth = 1.2;
+            ctx.stroke();
+          }
+        }
       }
-      requestAnimationFrame(animateStars);
+      requestAnimationFrame(drawNetwork);
     }
 
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-    animateStars();
+    window.addEventListener('resize', initNodes);
+    initNodes();
+    drawNetwork();
 
     // 2. Определение страны посетителя
     let visitorCountry = 'Uzbekistan';
@@ -427,25 +580,29 @@
       try {
         const res = await fetch('https://ipapi.co/json/');
         const geo = await res.json();
-        if (geo && geo.country_name) {
-          visitorCountry = geo.country_name;
-        }
-      } catch (e) {
-        // Если блокировщик закрыл запрос, подстрахует бэкенд Netlify
-      }
+        if (geo && geo.country_name) visitorCountry = geo.country_name;
+      } catch (e) {}
     }
     detectCountry();
 
-    // 3. Админ-панель и работа с базой
+    // 3. Работа с API, лайками и админкой
     const API_URL = '/.netlify/functions/api';
     const form = document.getElementById('noteForm');
     const input = document.getElementById('nameInput');
     const btn = document.getElementById('submitBtn');
     const list = document.getElementById('notesList');
-    const countBadge = document.getElementById('countBadge');
     const adminToggle = document.getElementById('adminToggle');
 
-    let adminPass = sessionStorage.getItem('galaxy_admin_pass') || '';
+    const statPosts = document.getElementById('statPosts');
+    const statCountries = document.getElementById('statCountries');
+    const statLikes = document.getElementById('statLikes');
+
+    let adminPass = sessionStorage.getItem('adu_admin_pass') || '';
+    let likedIds = new Set(JSON.parse(localStorage.getItem('adu_liked_ids') || '[]'));
+
+    function saveLikedIds() {
+      localStorage.setItem('adu_liked_ids', JSON.stringify([...likedIds]));
+    }
 
     function updateAdminButton() {
       if (adminPass) {
@@ -461,19 +618,61 @@
     adminToggle.addEventListener('click', () => {
       if (adminPass) {
         adminPass = '';
-        sessionStorage.removeItem('galaxy_admin_pass');
+        sessionStorage.removeItem('adu_admin_pass');
         updateAdminButton();
         loadNotes();
       } else {
         const pass = prompt('Admin parolni kiriting:');
         if (pass) {
           adminPass = pass.trim();
-          sessionStorage.setItem('galaxy_admin_pass', adminPass);
+          sessionStorage.setItem('adu_admin_pass', adminPass);
           updateAdminButton();
           loadNotes();
         }
       }
     });
+
+    async function toggleLike(id, btnEl, countEl) {
+      const isLiked = likedIds.has(id);
+      const action = isLiked ? 'unlike' : 'like';
+
+      // Мгновенный отклик в интерфейсе
+      let currentCount = Number(countEl.textContent) || 0;
+      if (isLiked) {
+        likedIds.delete(id);
+        btnEl.classList.remove('liked');
+        countEl.textContent = Math.max(0, currentCount - 1);
+      } else {
+        likedIds.add(id);
+        btnEl.classList.add('liked');
+        countEl.textContent = currentCount + 1;
+      }
+      saveLikedIds();
+      recalcTotalLikes();
+
+      try {
+        const res = await fetch(API_URL, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id, action })
+        });
+        const data = await res.json();
+        if (typeof data.likes === 'number') {
+          countEl.textContent = data.likes;
+          recalcTotalLikes();
+        }
+      } catch (err) {
+        console.error('Like error:', err);
+      }
+    }
+
+    function recalcTotalLikes() {
+      let sum = 0;
+      document.querySelectorAll('.like-count').forEach(el => {
+        sum += Number(el.textContent) || 0;
+      });
+      statLikes.textContent = sum;
+    }
 
     async function deleteNote(id) {
       if (!confirm("Ushbu yozuvni o'chirmoqchimisiz?")) return;
@@ -489,7 +688,7 @@
         if (res.status === 401) {
           alert("Parol noto'g'ri!");
           adminPass = '';
-          sessionStorage.removeItem('galaxy_admin_pass');
+          sessionStorage.removeItem('adu_admin_pass');
           updateAdminButton();
         }
         await loadNotes();
@@ -504,47 +703,72 @@
       return div.innerHTML;
     }
 
+    function makeBlockHash(id) {
+      const hex = ((Number(id) * 2654435761) >>> 0).toString(16).toUpperCase().padStart(6, '0');
+      return `#ADU-${String(id).padStart(3, '0')} • 0x${hex.slice(0, 4)}`;
+    }
+
     async function loadNotes() {
       try {
         const res = await fetch(API_URL);
         const data = await res.json();
         list.innerHTML = '';
-        countBadge.textContent = Array.isArray(data) ? data.length : 0;
 
-        if (Array.isArray(data)) {
-          data.forEach(item => {
-            const li = document.createElement('li');
-            const dateStr = item.created_at
-              ? new Date(item.created_at).toLocaleString('sv-SE', {
-                  year: 'numeric', month: '2-digit', day: '2-digit',
-                  hour: '2-digit', minute: '2-digit'
-                })
-              : '';
-            const countryName = item.country || 'Uzbekistan';
+        if (!Array.isArray(data)) return;
 
-            const contentDiv = document.createElement('div');
-            contentDiv.className = 'note-content';
-            contentDiv.innerHTML = `
-              <div class="guest-name"><span class="star-icon">✦</span><span>${escapeHtml(item.name)}</span></div>
+        statPosts.textContent = data.length;
+        const uniqueCountries = new Set(data.map(item => item.country || 'Uzbekistan'));
+        statCountries.textContent = uniqueCountries.size || 1;
+        statLikes.textContent = data.reduce((acc, item) => acc + (Number(item.likes) || 0), 0);
+
+        data.forEach(item => {
+          const li = document.createElement('li');
+          const dateStr = item.created_at
+            ? new Date(item.created_at).toLocaleString('sv-SE', {
+                year: 'numeric', month: '2-digit', day: '2-digit',
+                hour: '2-digit', minute: '2-digit'
+              })
+            : '';
+          const countryName = item.country || 'Uzbekistan';
+          const likesCount = Number(item.likes) || 0;
+          const isLiked = likedIds.has(item.id);
+
+          li.innerHTML = `
+            <div class="card-top">
+              <span class="block-hash">${makeBlockHash(item.id)}</span>
+              <span>📅 ${dateStr}</span>
+            </div>
+            <div class="guest-text">${escapeHtml(item.name)}</div>
+            <div class="card-bottom">
               <div class="note-meta">
                 <span class="meta-item">🌍 ${escapeHtml(countryName)}</span>
-                <span class="meta-item">📅 ${dateStr}</span>
               </div>
-            `;
-            li.appendChild(contentDiv);
+              <div class="card-actions"></div>
+            </div>
+          `;
 
-            if (adminPass && item.id) {
-              const delBtn = document.createElement('button');
-              delBtn.type = 'button';
-              delBtn.className = 'delete-btn';
-              delBtn.textContent = "🗑 O'chirish";
-              delBtn.onclick = () => deleteNote(item.id);
-              li.appendChild(delBtn);
-            }
+          const actionsDiv = li.querySelector('.card-actions');
 
-            list.appendChild(li);
-          });
-        }
+          // Кнопка лайка
+          const likeBtn = document.createElement('button');
+          likeBtn.type = 'button';
+          likeBtn.className = 'like-btn' + (isLiked ? ' liked' : '');
+          likeBtn.innerHTML = `<span>❤️</span><span class="like-count">${likesCount}</span>`;
+          likeBtn.onclick = () => toggleLike(item.id, likeBtn, likeBtn.querySelector('.like-count'));
+          actionsDiv.appendChild(likeBtn);
+
+          // Кнопка удаления в режиме админа
+          if (adminPass && item.id) {
+            const delBtn = document.createElement('button');
+            delBtn.type = 'button';
+            delBtn.className = 'delete-btn';
+            delBtn.textContent = "🗑 O'chirish";
+            delBtn.onclick = () => deleteNote(item.id);
+            actionsDiv.appendChild(delBtn);
+          }
+
+          list.appendChild(li);
+        });
       } catch (err) {
         console.error('Yuklashda xatolik:', err);
       }
@@ -556,7 +780,7 @@
       if (!name) return;
 
       btn.disabled = true;
-      btn.textContent = '⏳ Uchirilmoqda...';
+      btn.textContent = '⏳ Saqlanmoqda...';
 
       try {
         await fetch(API_URL, {
@@ -570,7 +794,7 @@
         alert('Saqlashda xatolik yuz berdi');
       } finally {
         btn.disabled = false;
-        btn.textContent = "🚀 Koinotga qo'shilish";
+        btn.textContent = '⚡ Raqamli iz qoldirish';
       }
     });
 
